@@ -34,6 +34,11 @@ WHERE Country = "Mexico";
 
 --3 select all customers' records from the country "Germany" and the city "Berlin" or "Mannheim",  sort by the Address from Z to A
 
+SELECT *
+FROM Customers
+WHERE Country = 'Germany' and City IN ('Berlin', 'Mannheim')
+ORDER BY Address DESC;
+
 +------------+-------------------------+--------------+----------------+----------+------------+---------+
 | CustomerID | CustomerName            | ContactName  | Address        | City     | PostalCode | Country |
 +------------+-------------------------+--------------+----------------+----------+------------+---------+
@@ -43,6 +48,11 @@ WHERE Country = "Mexico";
 2 rows in set (0.00 sec)
 
 --4 select all customers' records, whose name ends with "s", from country, which name does not contain the pattern "land" and starts with "b", sort by the Country from A to Z
+
+SELECT *
+FROM Customers
+WHERE CustomerName LIKE '%s' AND Country NOT LIKE '%land%' AND Country LIKE 'b%'
+ORDER BY Country ASC;
 
 +------------+------------------------+-------------------+-------------------------+----------------+------------+---------+
 | CustomerID | CustomerName           | ContactName       | Address                 | City           | PostalCode | Country |
@@ -57,6 +67,10 @@ WHERE Country = "Mexico";
 
 --5 select all customers' records from a City of "Paris", "Berlin", "Mannheim" or "London" and their IDs grater than 10, but less that 20
 
+SELECT *
+FROM Customers
+WHERE  City IN ('Paris', 'Berlin', 'Mannheim', 'London') AND CustomerID BETWEEN 10 AND 20;
+
 +------------+-----------------------+-------------------+-----------------------------+--------+------------+---------+
 | CustomerID | CustomerName          | ContactName       | Address                     | City   | PostalCode | Country |
 +------------+-----------------------+-------------------+-----------------------------+--------+------------+---------+
@@ -67,6 +81,10 @@ WHERE Country = "Mexico";
 3 rows in set (0.00 sec)
 
 --6 selects all orders with an ordered between 04-July-1996 and 09-July-1996
+
+SELECT *
+FROM Orders
+WHERE OrderDate BETWEEN '1996-07-04' AND '1996-07-09';
 
 +---------+------------+------------+------------+-----------+
 | OrderID | CustomerID | EmployeeID | OrderDate  | ShipperID |
