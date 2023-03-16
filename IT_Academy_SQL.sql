@@ -99,6 +99,10 @@ WHERE OrderDate BETWEEN '1996-07-04' AND '1996-07-09';
 
 --7 select the list of orders (its ID, customer's Name and the date of an order) which were made in the second decade of February, 1997
 
+SELECT Orders.OrderID, Customers.CustomerName, Orders.OrderDate
+FROM Orders JOIN Customers on Orders.CustomerID = Customers.CustomerID
+WHERE MONTH(OrderDate)=2 AND DAY(OrderDate) BETWEEN 11 AND 20;
+
 +---------+--------------------+------------+
 | OrderID | CustomerName       | OrderDate  |
 +---------+--------------------+------------+
@@ -109,6 +113,10 @@ WHERE OrderDate BETWEEN '1996-07-04' AND '1996-07-09';
 
 --8 find all employees (their names) and "Amount of orders" they made (if any), sort them by name from A to Z, ensure all result columns have appropriate names.
 
+SELECT EmployeesFirstName, Count(Orders.OrderID) AS 'Amount of orders'
+FROM Employees LEFT JOIN Orders on Employees.EmployeeID=Orders.EmployeeId
+GROUP BY Employees.EmployeeID
+ORDER BY 1 ASC;
 +-----------+------------------+
 | FirstName | Amount of orders |
 +-----------+------------------+
@@ -127,6 +135,15 @@ WHERE OrderDate BETWEEN '1996-07-04' AND '1996-07-09';
 
 --9 select all unique UK cities, where customers and suppliers live, sort from A to Z
 
+SELECT DISTINCT City, Country
+FROM Customers
+WHERE Country = 'UK'
+UNION
+Select DISTINCT City, Country
+FROM Suppliers
+WHERE Country = 'UK'
+Order BY 1 ASC;
+
 +------------+---------+
 | City       | Country |
 +------------+---------+
@@ -138,6 +155,11 @@ WHERE OrderDate BETWEEN '1996-07-04' AND '1996-07-09';
 4 rows in set (0.00 sec)
 
 --10 select products (their names) and prices records that have an above average price, but cheaper than 33, sort ascending
+
+SELECT ProductName, Price
+FROM voodoo.Products
+WHERE Price > (SELECT AVG(Price) FROM voodoo.Products) AND Price < 33
+ORDER BY 2 ASC;
 
 +---------------------------------+-------+
 | ProductName                     | Price |
@@ -153,6 +175,12 @@ WHERE OrderDate BETWEEN '1996-07-04' AND '1996-07-09';
 
 --11 select shippers that shipped an above average (to column "Sender"), amount of orders they shipped (to column "Items Sent") and percentage of shipping from overall amount (to column "Quota", values have to be with '%' sign)
 
+SELECT Shippers.ShipperName AS Sender, COUNT(Orders.OrderID) AS 'Item Sent', CONCAY(ROUND(COUNT(Orders.OrderID)*100/(SELECT COUNT(Orders.OrderID) FROM Orders), 2) AS Quota
+FROM Shippers JOIN Orders on ShipperId = Orders.ShipperId
+GROUP BY Orders.ShipperID
+HAVING COUNT(Orders.ShipperID) > (SELECT AVG(ShipperAVG) AS AVGShipper FROM (SELECT Count(ShipperID) AS ShipperAVG FROM Orders GROUP BY ShipperID) AS Subtable);                                                                                  
+
+                                                                                    
 +------------------+------------+--------+
 | Sender           | Items Sent | Quota  |
 +------------------+------------+--------+
