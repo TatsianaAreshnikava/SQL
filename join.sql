@@ -43,7 +43,7 @@ join roles_employee on employees.id = roles_employee.employee_id
 join roles on roles_employee.role_id = roles.id
 where roles.role_name like '%Java%';
 
--- 9. Вывести имена и должность всех QA инженеров.
+-- 8. Вывести имена и должность всех QA инженеров.
 select employees.employee_name, roles.role_name
 from employees 
 join roles_employee on employees.id = roles_employee.employee_id 
